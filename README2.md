@@ -17,6 +17,10 @@
 * Virtual buttons will be developed soon (I was thinking of just making half the screen the "right" button and the 
   other half the "left" button. If the andriod app buttons are implemented differently, let me know)
   
-* Data sent from the board is in "bat.xCoord!" format, other README specificed "bat.xCoord, bat.xCoord!", wondering if this was a typo?
+* Data sent from the board is in "bat.xCoord!" format, other README specificed "bat.xCoord, bat.xCoord!", wondering 
+  if this was a typo?
 
 * X coordinate sent from board is always 4 characters long (i.e. 001! 100! 054!)
+
+* On first download onto the board, if it gets stuck in a faultloop, you may have to redownload it twice (pretty sure I'm missing a delay 
+  somewhere, just not sure where)

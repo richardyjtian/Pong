@@ -18,10 +18,9 @@ import android.view.SurfaceView;
 
 import java.io.IOException;
 
-// Format of bluetooth data sent (all scaled to size of TM4 LCD): Ball.xcoord, Ball.ycoord; BottomBat.xcoord, BottomBat.ycoord.
-// Format of bluetooth data rcved (all scaled to size of TM4 LCD): TopBat.xcoord, TopBat.ycoord.
-
 class PongView extends SurfaceView implements Runnable {
+    MainActivity.SendReceive mSendReceive;
+
     // This is our thread
     Thread mGameThread = null;
 
@@ -73,10 +72,7 @@ class PongView extends SurfaceView implements Runnable {
 
     public PongView(Context context, int x, int y, int PhoneX, int PhoneY) {
 
-    /*
-        The next line of code asks the
-        SurfaceView class to set up our object.
-    */
+        // Ask the SurfaceView class to set up our object
         super(context);
 
         // Set the screen width and height
@@ -236,6 +232,9 @@ class PongView extends SurfaceView implements Runnable {
 
             sp.play(beep3ID, 1, 1, 0, 0, 1);
         }
+
+        // Send data to the TM4
+        mSendReceive.write("hehe".getBytes());
     }
 
     // Draw the newly updated scene
@@ -297,25 +296,30 @@ class PongView extends SurfaceView implements Runnable {
     // So we can override this method and detect screen touches.
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
-        switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
-            // Player has touched the screen
-            case MotionEvent.ACTION_DOWN:
-                mPaused = false;
-                float x = motionEvent.getX();
-                // Is the touch on the right or left?
-                if(x > mScreenX / 2 && x < mScreenX){
-                    mBottomBat.setMovementState(mBottomBat.RIGHT);
-                }
-                else if(x <= mScreenX / 2){
-                    mBottomBat.setMovementState(mBottomBat.LEFT);
-                }
-                break;
+        // Cannot play if not connected through bluetooth
+        if(mSendReceive != null) {
+            switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
+                // Player has touched the screen
+                case MotionEvent.ACTION_DOWN:
+                    mPaused = false;
+                    float x = motionEvent.getX();
+                    // Is the touch on the right or left?
+                    if (x > mScreenX / 2 && x < mScreenX) {
+                        mBottomBat.setMovementState(mBottomBat.RIGHT);
+                    } else if (x <= mScreenX / 2) {
+                        mBottomBat.setMovementState(mBottomBat.LEFT);
+                    }
+                    break;
 
-            // Player has removed finger from screen
-            case MotionEvent.ACTION_UP:
-                mBottomBat.setMovementState(mBottomBat.STOPPED);
-                break;
+                // Player has removed finger from screen
+                case MotionEvent.ACTION_UP:
+                    mBottomBat.setMovementState(mBottomBat.STOPPED);
+                    break;
+            }
+            return true;
         }
-        return true;
+        else{
+            return false;
+        }
     }
 }

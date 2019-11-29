@@ -90,8 +90,8 @@ public class Ball {
 
     public void reset(RectF bat){
         mRect.left = mScreenX / 2;
-        mRect.top = bat.top - 1 - mBallHeight;
+        mRect.top = bat.top;
         mRect.right = mScreenX / 2 + mBallWidth;
-        mRect.bottom = bat.top - 1;
+        mRect.bottom = bat.top + mBallHeight;
     }
 }

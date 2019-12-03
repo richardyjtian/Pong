@@ -24,11 +24,8 @@ public class Ball {
         mBallWidth = x / 80;
         mBallHeight = mBallWidth;
 
-    /*
-        Start the ball travelling straight up
-        at a quarter of the screen height per second
-    */
-        mYVelocity = y / 4;
+        // Start the ball travelling up
+        mYVelocity = -y / 4;
         mXVelocity = mYVelocity;
 
         // Initialize the Rect that represents the mBall
@@ -43,6 +40,9 @@ public class Ball {
 
     // Give access to the Ball height
     public float getmBallHeight() { return mBallHeight; }
+
+    // Give access to the Ball height
+    public float getmBallWidth() { return mBallWidth; }
 
     // Change the position each frame
     public void update(long fps){
@@ -93,5 +93,8 @@ public class Ball {
         mRect.top = bat.top;
         mRect.right = mScreenX / 2 + mBallWidth;
         mRect.bottom = bat.top + mBallHeight;
+
+        mYVelocity = -mScreenY / 4;
+        mXVelocity = mYVelocity;
     }
 }

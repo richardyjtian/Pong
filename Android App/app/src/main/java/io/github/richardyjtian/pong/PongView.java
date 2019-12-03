@@ -19,6 +19,7 @@ import android.view.SurfaceView;
 import java.io.IOException;
 
 class PongView extends SurfaceView implements Runnable {
+    Context mContext;
     MainActivity.SendReceive mSendReceive;
 
     // This is our thread
@@ -74,6 +75,8 @@ class PongView extends SurfaceView implements Runnable {
 
         // Ask the SurfaceView class to set up our object
         super(context);
+
+        mContext = context;
 
         // Set the screen width and height
         mScreenX = x;
@@ -148,6 +151,8 @@ class PongView extends SurfaceView implements Runnable {
 
     @Override
     public void run() {
+        while(mSendReceive == null)
+            ;
         while (mPlaying) {
 
             // Capture the current time in milliseconds in startFrameTime
@@ -194,7 +199,7 @@ class PongView extends SurfaceView implements Runnable {
         if(RectF.intersects(mTopBat.getRect(), mBall.getRect())) {
             mBall.setRandomXVelocity();
             mBall.reverseYVelocity();
-            mBall.clearObstacleY(mTopBat.getRect().bottom + 2);
+            mBall.clearObstacleY(mTopBat.getRect().bottom + mBall.getmBallHeight() + 2);
 
             mBall.increaseVelocity();
 
@@ -204,6 +209,7 @@ class PongView extends SurfaceView implements Runnable {
         // Reset the mBall when it hits the bottom of screen
         if(mBall.getRect().bottom > mScreenY){
             // TM4 player gets a point
+            mSendReceive.write("1".getBytes()[0]);
             mTopScore++;
             // Put the mBall back to the start
             mBall.reset(mBottomBat.getRect());
@@ -212,6 +218,7 @@ class PongView extends SurfaceView implements Runnable {
         // Reset the mBall when it hits the top of screen
         if(mBall.getRect().top < 0){
             // Phone player gets a point
+            mSendReceive.write("0".getBytes()[0]);
             mBottomScore++;
             // Put the mBall back to the start
             mBall.reset(mBottomBat.getRect());
@@ -228,13 +235,10 @@ class PongView extends SurfaceView implements Runnable {
         // If the mBall hits right wall bounce
         if(mBall.getRect().right > mScreenX){
             mBall.reverseXVelocity();
-            mBall.clearObstacleX(mScreenX - 22);
+            mBall.clearObstacleX(mScreenX - mBall.getmBallWidth() - 2);
 
             sp.play(beep3ID, 1, 1, 0, 0, 1);
         }
-
-        // Send data to the TM4
-        mSendReceive.write("hehe".getBytes());
     }
 
     // Draw the newly updated scene

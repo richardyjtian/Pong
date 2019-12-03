@@ -13,10 +13,8 @@ import android.os.Bundle;
 import android.view.Display;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.UUID;
 
@@ -37,7 +35,8 @@ public class MainActivity extends AppCompatActivity {
     static final int STATE_CONNECTION_FAILED = 3;
     static final int STATE_MESSAGE_RECEIVED = 4;
 
-    private static final String TM4_MAC_ADDRESS = "00:06:66:86:5F:D0";
+    private static final String TM4_MAC_ADDRESS = "00:06:66:F2:34:50"; // Richard's TM4: "00:06:66:86:5F:D0";
+
     private static final UUID SERIAL_UUID = java.util.UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); //Standard SerialPortService ID
 
     SendReceive sendReceive;
@@ -164,10 +163,13 @@ public class MainActivity extends AppCompatActivity {
 //                        currRcvStr += newRcvStr;
 //                    }
                     int dir = (int) msg.obj;
-                    if(dir > 0)
+//                    overrideToast(String.valueOf(dir));
+                    if(dir == 48)
+                        pongView.mTopBat.setMovementState(pongView.mTopBat.LEFT);
+                    else if(dir == 49)
                         pongView.mTopBat.setMovementState(pongView.mTopBat.RIGHT);
                     else
-                        pongView.mTopBat.setMovementState(pongView.mTopBat.LEFT);
+                        pongView.mTopBat.setMovementState(pongView.mTopBat.STOPPED);
                     break;
             }
             return true;
@@ -240,13 +242,12 @@ public class MainActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
             }
         }
 
-        public void write(byte[] bytes){
+        public void write(byte b){
             try {
-                outputStream.write(bytes);
+                outputStream.write(b);
             } catch (IOException e) {
                 e.printStackTrace();
             }

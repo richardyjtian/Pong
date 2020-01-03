@@ -1,5 +1,7 @@
 # EE474Lab5
 
+## Credits to Game Code School for the datastructures and algorithms used in a one-player Pong game
+
 ## Specifications:
 
 ### Bluetooth communication:

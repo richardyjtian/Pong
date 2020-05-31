@@ -1,4 +1,4 @@
-# EE474Lab5
+# Pong
 
 ## Credits to Game Code School for the datastructures and algorithms used in a one-player Pong game
 
